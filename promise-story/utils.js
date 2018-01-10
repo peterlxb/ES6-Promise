@@ -1,9 +1,28 @@
+var fakeSlowNetwork;
 
+(function() {
+  var lsKey = 'fake-slow-network';
+  var networkFakeDiv = document.querySelector('.network-fake');
+  var checkbox = networkFakeDiv.querySelector('input');
+
+  fakeSlowNetwork = Number(localStorage.getItem(lsKey)) || 0;
+
+  networkFakeDiv.style.display = 'block';
+  checkbox.checked = !!fakeSlowNetwork;
+
+  checkbox.addEventListener('change', function() {
+    localStorage.setItem(lsKey, Number(checkbox.checked));
+    location.reload();
+  });
+}());
 
 
 function get(url) {
+
+  var fakeNetworkWait = wait(3000 * Math.random() * fakeSlowNetwork);
+
   // Return a new promise.
-  return new Promise(function(resolve, reject) {
+  var requestPromise = new Promise(function(resolve, reject) {
     // Do the usual XHR stuff
     var req = new XMLHttpRequest();
     req.open('GET', url);
@@ -30,7 +49,18 @@ function get(url) {
     // Make the request
     req.send();
   });
+  
+  return Promise.all([fakeNetworkWait, requestPromise]).then(function(results) {
+    return results[1];
+  });
 }
+
+function wait(ms){
+  return new Promise(function(resolve){
+    setTimeout(resolve,ms)
+  })
+}
+
 
 function getJSON(url) {
   return get(url).then(JSON.parse);
