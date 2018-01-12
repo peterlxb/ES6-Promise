@@ -2,7 +2,7 @@ requirejs.config({
   baseUrl:"/",
   paths:{
     jquery:'./libs/jquery-3.2.0',
-    API:'./libs/utils',
+    utils:'./libs/utils',
     request:'./libs/request',
     calendar:'./components/calendar'
   }

@@ -1,12 +1,12 @@
 define(function(require){
-  var API = require('API');
+  var utils = require('utils');
 
   getDayInfo = function(){
-    return $.get(API.dayInfo);
+    return $.get(utils.dayInfo);
   }
 
   getTypeInfo = function() {
-    return $.get(API.typeInfo);
+    return $.get(utils.typeInfo);
   }
 
   return {
